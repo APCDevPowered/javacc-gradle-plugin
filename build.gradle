@@ -1,0 +1,35 @@
+group = 'org.apcdevpowered'
+version = '1.0.0-SNAPSHOT'
+
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'groovy'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+}
+
+compileGroovy {
+    options.encoding = 'UTF-8'
+    sourceCompatibility = '1.7'
+    targetCompatibility = '1.7'
+}
+
+eclipse {
+    classpath {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
