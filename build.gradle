@@ -4,10 +4,9 @@ version = '1.0.0-SNAPSHOT'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'groovy'
+apply plugin: 'maven-publish'
 
-repositories {
-    mavenCentral()
-}
+repositories { mavenCentral() }
 
 dependencies {
     compile gradleApi()
@@ -18,6 +17,14 @@ compileGroovy {
     options.encoding = 'UTF-8'
     sourceCompatibility = '1.7'
     targetCompatibility = '1.7'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
 }
 
 eclipse {
