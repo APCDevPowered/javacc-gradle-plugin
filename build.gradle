@@ -11,6 +11,9 @@ repositories { mavenCentral() }
 dependencies {
     compile gradleApi()
     compile localGroovy()
+
+    compile 'net.java.dev.javacc:javacc:6.1.2'
+    compile files('src/main/resources/jtb/jtb-1.4.0.jar')
 }
 
 compileGroovy {
@@ -21,9 +24,7 @@ compileGroovy {
 
 publishing {
     publications {
-        maven(MavenPublication) {
-            from components.java
-        }
+        maven(MavenPublication) { from components.java }
     }
 }
 
