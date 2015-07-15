@@ -5,6 +5,7 @@ import java.io.File
 import org.apcdevpowered.gradle.javacc.JavaCCPlugin
 import org.apcdevpowered.gradle.javacc.internal.ZipClassLoader
 import org.apcdevpowered.gradle.javacc.model.JTBOptions
+import org.gradle.api.GradleException
 import org.gradle.api.file.RelativePath
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Nested
@@ -46,12 +47,21 @@ class CompileJTBTask extends AbstractCompileTask {
         String[] userOptions = options.buildOptions()
         List<String> programOptions = new ArrayList<String>()
         File destinationPackageDir = new File(getDestinationDir(), CollectionUtils.join("/", Arrays.copyOfRange(relativePath.getSegments(), 0, relativePath.getSegments().length - 1)))
+        File outputFile = new File(destinationPackageDir, 'jtb.out.jj')
+        long outputFileLastModified = outputFile ? outputFile.lastModified() : 0L
         destinationPackageDir.mkdirs()
         programOptions.addAll( ['-d', destinationPackageDir])
         programOptions.addAll( ['-p', destinationPackageDir])
-        programOptions.addAll( ['-o', new File(destinationPackageDir, 'jtb.out.jj')])
+        programOptions.addAll( ['-o', outputFile])
         String[] options = (programOptions as String[]) + userOptions + sourceFile
-        jtbClass.invokeMethod('main', options)
+        jtbClass.invokeMethod('main', [options] as Object[])
+        Class<?> messagesClass = getJTBClass(version, 'EDU.purdue.jtb.misc.Messages')
+        int errorCount  = messagesClass.invokeMethod('errorCount', [] as Object[])
+        if (errorCount) {
+            throw new GradleException("JTB failed with ${errorCount} errors")
+        }
+        if (!outputFile.exists()) throw new GradleException("JTB failed with output file not exists")
+        if ((outputFile ? outputFile.lastModified() : 0L) == outputFileLastModified) throw new GradleException("JTB failed with output file last modified time not changed")
     }
 
     private static Class<?> getJTBClass(String version, String name) {
@@ -59,7 +69,7 @@ class CompileJTBTask extends AbstractCompileTask {
         if(classLoader) return classLoader.loadClass(name)
         InputStream resourceStream = JavaCCPlugin.getClassLoader().getResourceAsStream("jtb/jtb-${version}.jar")
         if(resourceStream == null) {
-            throw new IllegalArgumentException("JTB version ${version} not found")
+            throw new GradleException("JTB version ${version} not found")
         }
         return resourceStream.withCloseable( { InputStream inputStream ->
             classLoader = new ZipClassLoader(inputStream)
