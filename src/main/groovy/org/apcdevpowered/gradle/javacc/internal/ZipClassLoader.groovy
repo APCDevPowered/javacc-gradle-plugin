@@ -15,7 +15,7 @@ class ZipClassLoader extends ClassLoader implements Closeable {
     ZipFile zipFile
 
     ZipClassLoader(InputStream inputSream) {
-        tempFile = File.createTempFile("", ".jar")
+        tempFile = File.createTempFile("ZipClassLoader.", ".jar")
         tempFile.withOutputStream( { OutputStream outputStream -> outputStream << inputSream } )
         zipFile = new ZipFile(tempFile)
     }

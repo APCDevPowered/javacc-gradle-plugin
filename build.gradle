@@ -10,7 +10,9 @@ repositories { mavenCentral() }
 
 dependencies {
     compile gradleApi()
-    compile localGroovy()
+    compile 'org.codehaus.groovy:groovy-all:2.4.3'
+    
+    compile 'commons-io:commons-io:2.4'
 
     compile 'net.java.dev.javacc:javacc:6.1.2'
     compile files('src/main/resources/jtb/jtb-1.4.0.jar')
