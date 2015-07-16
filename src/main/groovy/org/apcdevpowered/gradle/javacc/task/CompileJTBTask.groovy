@@ -6,7 +6,7 @@ import org.apcdevpowered.gradle.javacc.JavaCCPlugin
 import org.apcdevpowered.gradle.javacc.internal.ZipClassLoader
 import org.apcdevpowered.gradle.javacc.model.JTBOptions
 import org.gradle.api.GradleException
-import org.gradle.api.file.FileVisitDetails;
+import org.gradle.api.file.FileVisitDetails
 import org.gradle.api.file.RelativePath
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Nested

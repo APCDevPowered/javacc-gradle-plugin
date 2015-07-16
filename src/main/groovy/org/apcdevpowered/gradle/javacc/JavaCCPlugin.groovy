@@ -51,6 +51,9 @@ class JavaCCPlugin implements Plugin<Project> {
                 group = 'JavaCC'
                 description = 'Compile JavaCC code.'
                 source = javaccSourceSet.getJavaCC()
+                processSourceSet = {
+                    sourceSet.java.srcDir(destinationDir)
+                }
             }
             project.tasks.getByName(sourceSet.getCompileJavaTaskName()).shouldRunAfter(task)
             if(sourceSet.getName().equals(SourceSet.MAIN_SOURCE_SET_NAME)) {
@@ -75,8 +78,16 @@ class JavaCCPlugin implements Plugin<Project> {
                 group = 'JavaCC'
                 description = 'Compile JJTree code.'
                 source = jjtreeSourceSet.getJJTree()
+                processSourceSet = {
+                    sourceSet.javacc.srcDir(destinationDir)
+                }
             }
-            project.tasks.getByName(sourceSet.getCompileTaskName('JavaCC')).dependsOn(task)
+            project.tasks.getByName(sourceSet.getCompileTaskName('JavaCC')).shouldRunAfter(task)
+            if(sourceSet.getName().equals(SourceSet.MAIN_SOURCE_SET_NAME)) {
+                project.tasks.getByName("assemble").dependsOn(task)
+            } else if(sourceSet.getName().equals(SourceSet.TEST_SOURCE_SET_NAME)) {
+                project.tasks.getByName("test").dependsOn(task)
+            }
         } )
     }
 
@@ -94,8 +105,16 @@ class JavaCCPlugin implements Plugin<Project> {
                 group = 'JavaCC'
                 description = 'Compile JTB code.'
                 source = jtbSourceSet.getJTB()
+                processSourceSet = {
+                    sourceSet.javacc.srcDir(destinationDir)
+                }
             }
-            project.tasks.getByName(sourceSet.getCompileTaskName('JavaCC')).dependsOn(task)
+            project.tasks.getByName(sourceSet.getCompileTaskName('JavaCC')).shouldRunAfter(task)
+            if(sourceSet.getName().equals(SourceSet.MAIN_SOURCE_SET_NAME)) {
+                project.tasks.getByName("assemble").dependsOn(task)
+            } else if(sourceSet.getName().equals(SourceSet.TEST_SOURCE_SET_NAME)) {
+                project.tasks.getByName("test").dependsOn(task)
+            }
         } )
     }
 }

@@ -4,7 +4,7 @@ import java.io.File
 
 import org.apcdevpowered.gradle.javacc.model.JavaCCOptions
 import org.gradle.api.GradleException
-import org.gradle.api.file.FileVisitDetails;
+import org.gradle.api.file.FileVisitDetails
 import org.gradle.api.file.RelativePath
 import org.gradle.api.tasks.Nested
 import org.gradle.util.CollectionUtils

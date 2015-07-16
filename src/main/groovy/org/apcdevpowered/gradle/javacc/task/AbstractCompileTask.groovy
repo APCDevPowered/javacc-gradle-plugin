@@ -11,6 +11,7 @@ import org.gradle.api.tasks.TaskAction
 
 abstract class AbstractCompileTask extends SourceTask {
     File destinationDir
+    Closure processSourceSet
 
     AbstractCompileTask() {
         destinationDir = getDefaultDestinationDir()
@@ -29,10 +30,21 @@ abstract class AbstractCompileTask extends SourceTask {
     void setDestinationDir(File destinationDir) {
         this.destinationDir = destinationDir
     }
- 
+
+    public Closure getProcessSourceSet() {
+        return processSourceSet
+    }
+
+    public void setProcessSourceSet(Closure processSourceSet) {
+        this.processSourceSet = processSourceSet
+    }
+
     @TaskAction
-    public void apply() {
+    void apply() {
         getSource().visit( { FileVisitDetails fileDetails -> if (!fileDetails.isDirectory()) processFile(fileDetails) } )
+        if (processSourceSet != null) {
+            processSourceSet()
+        }
     }
 
     protected abstract void processFile(FileVisitDetails fileDetails)
