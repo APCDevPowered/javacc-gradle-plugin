@@ -10,6 +10,9 @@ import org.gradle.api.file.RelativePath
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Nested
 import org.gradle.util.CollectionUtils
+import org.gradle.util.ConfigureUtil
+
+import groovy.lang.Closure;
 
 class CompileJTBTask extends AbstractCompileTask {
     public final String defaultJTBVersion = '1.4.9'
@@ -37,8 +40,13 @@ class CompileJTBTask extends AbstractCompileTask {
     }
 
     @Nested
-    public JTBOptions getOptions() {
+    JTBOptions getOptions() {
         return options
+    }
+
+    CompileJTBTask options(Closure configureClosure) {
+        ConfigureUtil.configure(configureClosure, getOptions())
+        return this
     }
 
     @Override
@@ -50,11 +58,11 @@ class CompileJTBTask extends AbstractCompileTask {
         File outputFile = new File(destinationPackageDir, 'jtb.out.jj')
         long outputFileLastModified = outputFile ? outputFile.lastModified() : 0L
         destinationPackageDir.mkdirs()
-        programOptions.addAll( ['-d', destinationPackageDir])
-        programOptions.addAll( ['-p', destinationPackageDir])
-        programOptions.addAll( ['-o', outputFile])
-        String[] options = (programOptions as String[]) + userOptions + sourceFile
-        jtbClass.invokeMethod('main', [options] as Object[])
+        programOptions.addAll(['-d', destinationPackageDir])
+        programOptions.addAll(['-p', destinationPackageDir])
+        programOptions.addAll(['-o', outputFile])
+        String[] arguments = (programOptions as String[]) + userOptions + sourceFile
+        jtbClass.invokeMethod('main', [arguments] as Object[])
         Class<?> messagesClass = getJTBClass(version, 'EDU.purdue.jtb.misc.Messages')
         int errorCount  = messagesClass.invokeMethod('errorCount', [] as Object[])
         if (errorCount) {
@@ -66,9 +74,9 @@ class CompileJTBTask extends AbstractCompileTask {
 
     private static Class<?> getJTBClass(String version, String name) {
         ZipClassLoader classLoader = JTB_CLASS_LOADER_CACHE.get(version)
-        if(classLoader) return classLoader.loadClass(name)
+        if (classLoader) return classLoader.loadClass(name)
         InputStream resourceStream = JavaCCPlugin.getClassLoader().getResourceAsStream("jtb/jtb-${version}.jar")
-        if(resourceStream == null) {
+        if (resourceStream == null) {
             throw new GradleException("JTB version ${version} not found")
         }
         return resourceStream.withCloseable( { InputStream inputStream ->
