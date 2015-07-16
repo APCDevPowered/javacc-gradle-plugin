@@ -6,6 +6,7 @@ import org.apcdevpowered.gradle.javacc.JavaCCPlugin
 import org.apcdevpowered.gradle.javacc.internal.ZipClassLoader
 import org.apcdevpowered.gradle.javacc.model.JTBOptions
 import org.gradle.api.GradleException
+import org.gradle.api.file.FileVisitDetails;
 import org.gradle.api.file.RelativePath
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Nested
@@ -27,7 +28,7 @@ class CompileJTBTask extends AbstractCompileTask {
     }
 
     String[] getDefaultIncludeFiles() {
-        return ['**/*.jtb']
+        return ['**/*.jtb', '**/*.java']
     }
 
     @Input
@@ -50,6 +51,14 @@ class CompileJTBTask extends AbstractCompileTask {
     }
 
     @Override
+    protected void processFile(FileVisitDetails fileDetails) {
+        if(fileDetails.getFile().getName().endsWith('.jtb')) {
+            compileSource(fileDetails.getFile(), fileDetails.getRelativePath())
+        } else {
+            fileDetails.copyTo(new File(getDestinationDir(), fileDetails.getRelativePath().getPathString()))
+        }
+    }
+
     protected void compileSource(File sourceFile, RelativePath relativePath) {
         Class<?> jtbClass = getJTBClass(version, 'EDU.purdue.jtb.JTB')
         String[] userOptions = options.buildOptions()

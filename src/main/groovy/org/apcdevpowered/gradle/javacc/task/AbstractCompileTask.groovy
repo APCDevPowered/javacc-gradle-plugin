@@ -32,8 +32,8 @@ abstract class AbstractCompileTask extends SourceTask {
  
     @TaskAction
     public void apply() {
-        getSource().visit( { FileVisitDetails fileDetails -> if (!fileDetails.isDirectory()) compileSource(fileDetails.getFile(), fileDetails.getRelativePath()) } )
+        getSource().visit( { FileVisitDetails fileDetails -> if (!fileDetails.isDirectory()) processFile(fileDetails) } )
     }
 
-    protected abstract void compileSource(File sourceFile, RelativePath relativePath)
+    protected abstract void processFile(FileVisitDetails fileDetails)
 }

@@ -8,5 +8,5 @@ interface JTBSourceSet {
 
     SourceDirectorySet getJTB()
 
-    SourceDirectorySet jtb(Closure configureClosure)
+    JTBSourceSet jtb(Closure configureClosure)
 }

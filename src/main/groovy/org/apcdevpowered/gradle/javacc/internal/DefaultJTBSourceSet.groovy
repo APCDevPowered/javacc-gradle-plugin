@@ -14,14 +14,14 @@ class DefaultJTBSourceSet implements JTBSourceSet {
 
     DefaultJTBSourceSet(String displayName, FileResolver fileResolver) {
         jtb = new DefaultSourceDirectorySet("${displayName} JTB source", fileResolver);
-        jtb.getFilter().include(['**/*.jtb']);
+        jtb.getFilter().include(['**/*.jtb', '**/*.java']);
     }
 
     SourceDirectorySet getJTB() {
         return jtb
     }
 
-    SourceDirectorySet jtb(Closure configureClosure) {
+    JTBSourceSet jtb(Closure configureClosure) {
         ConfigureUtil.configure(configureClosure, getJTB())
         return this
     }

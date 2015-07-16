@@ -8,5 +8,5 @@ interface JavaCCSourceSet {
 
     SourceDirectorySet getJavaCC()
 
-    SourceDirectorySet javacc(Closure configureClosure)
+    JavaCCSourceSet javacc(Closure configureClosure)
 }

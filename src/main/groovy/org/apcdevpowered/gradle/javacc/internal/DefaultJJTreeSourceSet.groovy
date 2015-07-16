@@ -14,7 +14,7 @@ class DefaultJJTreeSourceSet implements JJTreeSourceSet {
     
     DefaultJJTreeSourceSet(String displayName, FileResolver fileResolver) {
         jjtree = new DefaultSourceDirectorySet("${displayName} JJTree source", fileResolver);
-        jjtree.getFilter().include(['**/*.jjt']);
+        jjtree.getFilter().include(['**/*.jjt', '**/*.java']);
     }
 
 
@@ -22,7 +22,7 @@ class DefaultJJTreeSourceSet implements JJTreeSourceSet {
         return jjtree
     }
 
-    SourceDirectorySet jjtree(Closure configureClosure) {
+    JJTreeSourceSet jjtree(Closure configureClosure) {
         ConfigureUtil.configure(configureClosure, getJJTree())
         return this
     }

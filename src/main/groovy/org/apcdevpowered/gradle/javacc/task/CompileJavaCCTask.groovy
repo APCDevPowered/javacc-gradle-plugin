@@ -4,6 +4,7 @@ import java.io.File
 
 import org.apcdevpowered.gradle.javacc.model.JavaCCOptions
 import org.gradle.api.GradleException
+import org.gradle.api.file.FileVisitDetails;
 import org.gradle.api.file.RelativePath
 import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.SourceSet
@@ -22,7 +23,7 @@ class CompileJavaCCTask extends AbstractCompileTask {
     }
 
     String[] getDefaultIncludeFiles() {
-        return ['**/*.jj']
+        return ['**/*.jj', '**/*.java']
     }
 
     @Nested
@@ -36,6 +37,14 @@ class CompileJavaCCTask extends AbstractCompileTask {
     }
 
     @Override
+    protected void processFile(FileVisitDetails fileDetails) {
+        if(fileDetails.getFile().getName().endsWith('.jj')) {
+            compileSource(fileDetails.getFile(), fileDetails.getRelativePath())
+        } else {
+            fileDetails.copyTo(new File(getDestinationDir(), fileDetails.getRelativePath().getPathString()))
+        }
+    }
+
     protected void compileSource(File sourceFile, RelativePath relativePath) {
         String[] userOptions = options.buildOptions()
         List<String> programOptions = new ArrayList<String>()

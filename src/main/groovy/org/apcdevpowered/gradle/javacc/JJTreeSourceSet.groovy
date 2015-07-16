@@ -8,5 +8,5 @@ interface JJTreeSourceSet {
 
     SourceDirectorySet getJJTree()
 
-    SourceDirectorySet jjtree(Closure configureClosure)
+    JJTreeSourceSet jjtree(Closure configureClosure)
 }

@@ -14,14 +14,14 @@ class DefaultJavaCCSourceSet implements JavaCCSourceSet {
 
     DefaultJavaCCSourceSet(String displayName, FileResolver fileResolver) {
         javacc = new DefaultSourceDirectorySet("${displayName} JavaCC source", fileResolver);
-        javacc.getFilter().include(['**/*.jj']);
+        javacc.getFilter().include(['**/*.jj', '**/*.java']);
     }
 
     SourceDirectorySet getJavaCC() {
         return javacc
     }
 
-    SourceDirectorySet javacc(Closure configureClosure) {
+    JavaCCSourceSet javacc(Closure configureClosure) {
         ConfigureUtil.configure(configureClosure, getJavaCC())
         return this
     }
