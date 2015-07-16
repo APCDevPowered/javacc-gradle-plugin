@@ -11,7 +11,7 @@ repositories { mavenCentral() }
 dependencies {
     compile gradleApi()
     compile 'org.codehaus.groovy:groovy-all:2.4.3'
-    
+
     compile 'commons-io:commons-io:2.4'
 
     compile 'net.java.dev.javacc:javacc:6.1.2'
@@ -24,9 +24,27 @@ compileGroovy {
     targetCompatibility = '1.7'
 }
 
+task sourceJar(type: Jar) {
+    description = 'An archive of the source code of JavaCC Gradle Plugin'
+    classifier = 'sources'
+    from sourceSets.main.groovy
+}
+
+task javadocJar(type: Jar) {
+    description = 'An archive of the javadoc for JavaCC Gradle Plugin'
+    classifier = 'javadoc'
+    from groovydoc
+}
+
+artifacts { archives javadocJar, sourceJar }
+
 publishing {
     publications {
-        maven(MavenPublication) { from components.java }
+        maven(MavenPublication) {
+            from components.java
+            artifact sourceJar { classifier 'sources' }
+            artifact javadocJar { classifier 'javadoc' }
+        }
     }
 }
 
