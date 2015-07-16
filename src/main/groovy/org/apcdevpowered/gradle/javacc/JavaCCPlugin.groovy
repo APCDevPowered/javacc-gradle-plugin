@@ -52,6 +52,12 @@ class JavaCCPlugin implements Plugin<Project> {
                 description = 'Compile JavaCC code.'
                 source = javaccSourceSet.getJavaCC()
             }
+            project.tasks.getByName(sourceSet.getCompileJavaTaskName()).shouldRunAfter(task)
+            if(sourceSet.getName().equals(SourceSet.MAIN_SOURCE_SET_NAME)) {
+                project.tasks.getByName("assemble").dependsOn(task)
+            } else if(sourceSet.getName().equals(SourceSet.TEST_SOURCE_SET_NAME)) {
+                project.tasks.getByName("test").dependsOn(task)
+            }
         } )
     }
 
@@ -70,7 +76,7 @@ class JavaCCPlugin implements Plugin<Project> {
                 description = 'Compile JJTree code.'
                 source = jjtreeSourceSet.getJJTree()
             }
-            project.tasks.getByName(sourceSet.getCompileTaskName('JavaCC')).shouldRunAfter(task)
+            project.tasks.getByName(sourceSet.getCompileTaskName('JavaCC')).dependsOn(task)
         } )
     }
 
@@ -89,7 +95,7 @@ class JavaCCPlugin implements Plugin<Project> {
                 description = 'Compile JTB code.'
                 source = jtbSourceSet.getJTB()
             }
-            project.tasks.getByName(sourceSet.getCompileTaskName('JavaCC')).shouldRunAfter(task)
+            project.tasks.getByName(sourceSet.getCompileTaskName('JavaCC')).dependsOn(task)
         } )
     }
 }
