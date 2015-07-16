@@ -47,7 +47,7 @@ class JavaCCPlugin implements Plugin<Project> {
             sourceSet.getAllSource().source(javaccSourceSet.getJavaCC())
 
             String compileTaskName = sourceSet.getCompileTaskName('JavaCC')
-            project.tasks.create(compileTaskName, CompileJavaCCTask) {
+            CompileJavaCCTask task = project.tasks.create(compileTaskName, CompileJavaCCTask) {
                 group = 'JavaCC'
                 description = 'Compile JavaCC code.'
                 source = javaccSourceSet.getJavaCC()
@@ -65,11 +65,12 @@ class JavaCCPlugin implements Plugin<Project> {
             sourceSet.getAllSource().source(jjtreeSourceSet.getJJTree())
 
             String compileTaskName = sourceSet.getCompileTaskName('JJTree')
-            project.tasks.create(compileTaskName, CompileJJTreeTask) {
+            CompileJJTreeTask task = project.tasks.create(compileTaskName, CompileJJTreeTask) {
                 group = 'JavaCC'
                 description = 'Compile JJTree code.'
                 source = jjtreeSourceSet.getJJTree()
             }
+            project.tasks.getByName(sourceSet.getCompileTaskName('JavaCC')).shouldRunAfter(task)
         } )
     }
 
@@ -83,11 +84,12 @@ class JavaCCPlugin implements Plugin<Project> {
             sourceSet.getAllSource().source(jtbSourceSet.getJTB())
 
             String compileTaskName = sourceSet.getCompileTaskName('JTB')
-            project.tasks.create(compileTaskName, CompileJTBTask) {
+            CompileJTBTask task = project.tasks.create(compileTaskName, CompileJTBTask) {
                 group = 'JavaCC'
                 description = 'Compile JTB code.'
                 source = jtbSourceSet.getJTB()
             }
+            project.tasks.getByName(sourceSet.getCompileTaskName('JavaCC')).shouldRunAfter(task)
         } )
     }
 }
