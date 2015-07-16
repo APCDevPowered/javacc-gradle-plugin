@@ -4,6 +4,10 @@ import java.io.File
 
 import org.gradle.api.file.FileVisitDetails
 import org.gradle.api.file.RelativePath
+import org.gradle.api.internal.TaskInternal
+import org.gradle.api.internal.tasks.TaskExecuter;
+import org.gradle.api.internal.tasks.TaskExecutionContext;
+import org.gradle.api.internal.tasks.TaskStateInternal;
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.SourceTask
@@ -16,6 +20,18 @@ abstract class AbstractCompileTask extends SourceTask {
     AbstractCompileTask() {
         destinationDir = getDefaultDestinationDir()
         include(getDefaultIncludeFiles())
+        TaskExecuter originalExecuter = getExecuter()
+        setExecuter( { TaskInternal task, TaskStateInternal state, TaskExecutionContext context ->
+            try {
+                originalExecuter.execute(task, state, context)
+            } finally {
+                if (state.getFailure() == null) {
+                    if (processSourceSet != null) {
+                        processSourceSet.call()
+                    }
+                }
+            }
+        } as TaskExecuter )
     }
 
     abstract File getDefaultDestinationDir()
@@ -42,9 +58,6 @@ abstract class AbstractCompileTask extends SourceTask {
     @TaskAction
     void apply() {
         getSource().visit( { FileVisitDetails fileDetails -> if (!fileDetails.isDirectory()) processFile(fileDetails) } )
-        if (processSourceSet != null) {
-            processSourceSet()
-        }
     }
 
     protected abstract void processFile(FileVisitDetails fileDetails)
