@@ -51,6 +51,7 @@ class JavaCCPlugin implements Plugin<Project> {
                 group = 'JavaCC'
                 description = 'Compile JavaCC code.'
                 source = javaccSourceSet.getJavaCC()
+                destinationDir = new File(project.getBuildDir(), "generated/${sourceSet.getName()}/javacc")
                 processSourceSet = {
                     sourceSet.java.srcDir(destinationDir)
                 }
@@ -78,6 +79,7 @@ class JavaCCPlugin implements Plugin<Project> {
                 group = 'JavaCC'
                 description = 'Compile JJTree code.'
                 source = jjtreeSourceSet.getJJTree()
+                destinationDir = new File(project.getBuildDir(), "generated/${sourceSet.getName()}/jjtree")
                 processSourceSet = {
                     sourceSet.javacc.srcDir(destinationDir)
                 }
@@ -105,6 +107,7 @@ class JavaCCPlugin implements Plugin<Project> {
                 group = 'JavaCC'
                 description = 'Compile JTB code.'
                 source = jtbSourceSet.getJTB()
+                destinationDir = new File(project.getBuildDir(), "generated/${sourceSet.getName()}/jtb")
                 processSourceSet = {
                     sourceSet.javacc.srcDir(destinationDir)
                 }

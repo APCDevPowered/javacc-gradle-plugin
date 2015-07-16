@@ -17,10 +17,6 @@ class CompileJJTreeTask extends AbstractCompileTask {
 
     final JavaCCOptions options = new JavaCCOptions()
 
-    File getDefaultDestinationDir() {
-        return new File(getProject().getBuildDir(), 'generated/jjtree')
-    }
-
     String[] getDefaultIncludeFiles() {
         return ['**/*.jjt', '**/*.java']
     }

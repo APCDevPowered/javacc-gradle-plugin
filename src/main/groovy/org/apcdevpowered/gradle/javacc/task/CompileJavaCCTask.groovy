@@ -17,11 +17,6 @@ import groovy.lang.Closure
 class CompileJavaCCTask extends AbstractCompileTask {
 
     final JavaCCOptions options = new JavaCCOptions()
-
-    File getDefaultDestinationDir() {
-        return new File(getProject().getBuildDir(), 'generated/javacc')
-    }
-
     String[] getDefaultIncludeFiles() {
         return ['**/*.jj', '**/*.java']
     }

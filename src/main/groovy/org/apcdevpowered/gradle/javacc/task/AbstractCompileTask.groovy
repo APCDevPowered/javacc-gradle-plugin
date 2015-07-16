@@ -18,7 +18,6 @@ abstract class AbstractCompileTask extends SourceTask {
     Closure processSourceSet
 
     AbstractCompileTask() {
-        destinationDir = getDefaultDestinationDir()
         include(getDefaultIncludeFiles())
         TaskExecuter originalExecuter = getExecuter()
         setExecuter( { TaskInternal task, TaskStateInternal state, TaskExecutionContext context ->
@@ -33,8 +32,6 @@ abstract class AbstractCompileTask extends SourceTask {
             }
         } as TaskExecuter )
     }
-
-    abstract File getDefaultDestinationDir()
 
     abstract String[] getDefaultIncludeFiles()
 

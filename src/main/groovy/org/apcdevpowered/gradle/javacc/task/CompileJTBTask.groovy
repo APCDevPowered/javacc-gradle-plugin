@@ -23,10 +23,6 @@ class CompileJTBTask extends AbstractCompileTask {
     String version = defaultJTBVersion
     final JTBOptions options = new JTBOptions()
 
-    File getDefaultDestinationDir() {
-        return new File(getProject().getBuildDir(), 'generated/jtb')
-    }
-
     String[] getDefaultIncludeFiles() {
         return ['**/*.jtb', '**/*.java']
     }
