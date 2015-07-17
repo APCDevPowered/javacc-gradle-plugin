@@ -16,6 +16,7 @@ import org.gradle.util.ConfigureUtil
 import groovy.lang.Closure;
 
 class CompileJTBTask extends AbstractCompileTask {
+
     public final String defaultJTBVersion = '1.4.9'
 
     static final Map<String, ZipClassLoader> JTB_CLASS_LOADER_CACHE = new HashMap<String, ZipClassLoader>()

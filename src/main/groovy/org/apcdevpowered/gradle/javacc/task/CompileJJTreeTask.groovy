@@ -39,6 +39,7 @@ class CompileJJTreeTask extends AbstractCompileTask {
             fileDetails.copyTo(new File(getDestinationDir(), fileDetails.getRelativePath().getPathString()))
         }
     }
+    
     protected void compileSource(File sourceFile, RelativePath relativePath) {
         String[] userOptions = options.buildOptions()
         List<String> programOptions = new ArrayList<String>()
